@@ -1,9 +1,9 @@
-// Admin DB — використовує service key для повного доступу
+// Admin DB — використовує anon key + JWT (RLS через is_admin())
 const AdminDB = {
   _init() {
-    // Адмін використовує service key якщо є
-    const key = CONFIG.SUPABASE_SERVICE_KEY || CONFIG.SUPABASE_ANON_KEY;
-    DB.init(CONFIG.SUPABASE_URL, key);
+    if (!DB._url && CONFIG && CONFIG.SUPABASE_URL) {
+      DB.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    }
   },
 
   async get(table, params) {
