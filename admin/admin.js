@@ -45,8 +45,7 @@ const Admin = {
         expires_at: Date.now() + 30 * 24 * 3600 * 1000
       }));
 
-      // Адмін використовує service key для обходу RLS
-      DB._authToken = CONFIG.SUPABASE_SERVICE_KEY || data.access_token;
+      DB._authToken = data.access_token;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('admin-panel').style.display = 'block';
       this.load();
