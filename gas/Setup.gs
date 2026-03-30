@@ -11,7 +11,7 @@ var ADMIN_SHEET_ID = '1ywJFEB3kQjUJWjliAvHpVwx2wVXZ18W-bFzqVO7Vl7c';
 
 // URL Admin Apps Script (де зберігаються майстри)
 // Замінити після деплою Admin Script
-var ADMIN_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUdW7hw6vs7cdb-EquGH_xuMl0ZqRFws4qcDHEl5MzxF1r6sE6VpENkkPVQ-S1JlldMg/exec';
+var ADMIN_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGUkCyTCFmtJcCMNhBbv_A71cI6wqNaZoUlvbtmQvduUvP5wQ9XDAZNiVRXgu-S_AeYw/exec';
 
 function onOpen() {
   SpreadsheetApp.getUi()
