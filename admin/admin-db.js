@@ -1,13 +1,22 @@
-// Admin DB — використовує той самий Supabase клієнт що і DB
-// Але з service_role key (якщо є) або anon key
+// Admin DB — використовує service key для повного доступу
 const AdminDB = {
-  get: (table, params) => DB._get(table, params),
-  post: (action, data) => {
-    // Маппінг старих методів на нові
+  _init() {
+    // Адмін використовує service key якщо є
+    const key = CONFIG.SUPABASE_SERVICE_KEY || CONFIG.SUPABASE_ANON_KEY;
+    DB.init(CONFIG.SUPABASE_URL, key);
+  },
+
+  async get(table, params) {
+    this._init();
+    return DB._get(table, params);
+  },
+
+  async post(action, data) {
+    this._init();
     if (action === 'generateInvite') return DB.generateInvite();
-    if (action === 'getMasters') return DB.getMasters();
+    if (action === 'getMasters')     return DB.getMasters();
     if (action === 'registerMaster') return DB.addMaster(data);
     if (action === 'updateMasterStatus') return DB.updateMasterStatus(data.id, data.status);
-    return Promise.reject(new Error('Unknown action: ' + action));
+    throw new Error('Unknown action: ' + action);
   }
 };
