@@ -5,7 +5,7 @@
 
 // ⚠️ Замінити на ID свого Admin Google Sheet
 // URL виглядає так: docs.google.com/spreadsheets/d/ЦЕ_І_Є_ID/edit
-var ADMIN_SHEET_ID = 'ЗАМІНИТИ_НА_СВІЙ_ID';
+var ADMIN_SHEET_ID = '1ywJFEB3kQjUJWjliAvHpVwx2wVXZ18W-bFzqVO7Vl7c';
 
 function doGet(e) {
   try {

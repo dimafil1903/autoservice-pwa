@@ -6,6 +6,9 @@
 // Адреса PWA — замінити на реальну після деплою
 var PWA_URL = 'https://dimafil1903.github.io/autoservice-pwa/';
 
+// ID Admin Google Sheet (для реєстрації майстрів після setup)
+var ADMIN_SHEET_ID = '1ywJFEB3kQjUJWjliAvHpVwx2wVXZ18W-bFzqVO7Vl7c';
+
 // URL Admin Apps Script (де зберігаються майстри)
 // Замінити після деплою Admin Script
 var ADMIN_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUdW7hw6vs7cdb-EquGH_xuMl0ZqRFws4qcDHEl5MzxF1r6sE6VpENkkPVQ-S1JlldMg/exec';
