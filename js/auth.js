@@ -6,13 +6,19 @@ const Auth = {
     this.renderNumpad();
     this.updateDots();
 
-    // Check saved scriptUrl
-    const saved = localStorage.getItem('scriptUrl');
-    if (saved) {
-      DB.init(saved);
+    // Ініціалізуємо DB з Supabase
+    if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY) {
+      DB.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    }
+
+    // Перевіряємо збережений master_id
+    const savedMasterId = localStorage.getItem('masterId');
+    if (savedMasterId) {
+      DB.setMaster(savedMasterId);
       App.showMain();
       return;
     }
+
     App.showScreen('screen-auth');
   },
 
@@ -46,28 +52,18 @@ const Auth = {
   },
 
   async submit() {
-    if (!CONFIG.ADMIN_SCRIPT_URL) {
-      // No admin script — direct URL entry mode
-      App.toast('Введіть URL скрипту нижче', 'error');
-      this.pin = '';
-      this.updateDots();
-      return;
-    }
-
+    // Шукаємо майстра за PIN (invite_token == pin для простоти)
     try {
-      const url = CONFIG.ADMIN_SCRIPT_URL + '?action=auth&pin=' + this.pin;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (data.status === 'active' && data.scriptUrl) {
-        localStorage.setItem('scriptUrl', data.scriptUrl);
-        DB.init(data.scriptUrl);
+      const masters = await DB._get('masters', { invite_token: `eq.${this.pin}`, status: 'eq.active' });
+      if (masters.length) {
+        const master = masters[0];
+        localStorage.setItem('masterId', master.id);
+        localStorage.setItem('masterName', master.name || '');
+        DB.setMaster(master.id);
+        // Оновлюємо last_active
+        DB._patch('masters', master.id, { last_active: new Date().toISOString() });
         App.toast('Вхід виконано ✓', 'success');
         App.showMain();
-      } else if (data.status === 'blocked') {
-        document.getElementById('auth-error').textContent = '❌ Акаунт заблоковано. Зверніться до адміністратора.';
-        this.pin = '';
-        this.updateDots();
       } else {
         document.getElementById('auth-error').textContent = '❌ Невірний PIN';
         this.pin = '';
@@ -81,27 +77,13 @@ const Auth = {
   },
 
   async loginWithUrl(url) {
-    if (!url.startsWith('https://script.google.com')) {
-      App.toast('Невірний URL', 'error');
-      return;
-    }
-    try {
-      DB.init(url);
-      const res = await DB.ping();
-      if (res.ok) {
-        localStorage.setItem('scriptUrl', url);
-        App.toast('Підключено ✓', 'success');
-        App.showMain();
-      } else {
-        App.toast('Скрипт не відповів', 'error');
-      }
-    } catch {
-      App.toast('Помилка з\'єднання', 'error');
-    }
+    // Не використовується в Supabase версії, але залишаємо для сумісності
+    App.toast('Використовуйте PIN для входу', '');
   },
 
   logout() {
-    localStorage.removeItem('scriptUrl');
+    localStorage.removeItem('masterId');
+    localStorage.removeItem('masterName');
     this.pin = '';
     App.showScreen('screen-auth');
     App.hideNav();
