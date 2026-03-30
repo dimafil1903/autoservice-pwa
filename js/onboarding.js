@@ -20,7 +20,10 @@ const Onboarding = {
     if (params.get('invite')) {
       const token = params.get('invite');
       history.replaceState({}, '', location.pathname);
-      // Показуємо login screen з відкритою формою реєстрації
+      // Ініціалізуємо DB перед реєстрацією
+      if (CONFIG && CONFIG.SUPABASE_URL) {
+        DB.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+      }
       App.showScreen('screen-login');
       setTimeout(() => Auth.showRegisterForm(token), 100);
       return true;
