@@ -27,18 +27,7 @@ jobs:
           ADMIN_SCRIPT_URL: ${{ secrets.ADMIN_SCRIPT_URL }}
           TEMPLATE_SHEET_ID: ${{ secrets.TEMPLATE_SHEET_ID }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-        run: |
-          cat > config.js << EOF
-          const CONFIG = {
-            ADMIN_SCRIPT_URL: '${ADMIN_SCRIPT_URL}',
-            TEMPLATE_SHEET_ID: '${TEMPLATE_SHEET_ID}',
-            PWA_URL: 'https://dimafil1903.github.io/autoservice-pwa/',
-            APP_VERSION: '1.0.0',
-            ADMIN_PASSWORD: '${ADMIN_PASSWORD}'
-          };
-          EOF
-          echo "Config written:"
-          cat config.js
+        run: python3 scripts/inject-config.py
 
       - uses: actions/configure-pages@v5
 
