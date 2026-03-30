@@ -3,6 +3,7 @@ const DB = {
   _url: null,
   _key: null,
   _masterId: null,
+  _authToken: null,  // JWT access token після логіну
 
   init(url, key) {
     this._url = url.replace(/\/$/, '');
@@ -14,7 +15,7 @@ const DB = {
   _headers() {
     return {
       'apikey': this._key,
-      'Authorization': `Bearer ${this._key}`,
+      'Authorization': `Bearer ${this._authToken || this._key}`,
       'Content-Type': 'application/json',
       'Prefer': 'return=representation'
     };

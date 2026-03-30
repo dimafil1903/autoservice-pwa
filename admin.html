@@ -70,8 +70,9 @@
 
 <div id="login-screen">
   <h1>🔐 Адмін-панель</h1>
-  <input type="password" id="admin-password" placeholder="Пароль" onkeydown="if(event.key==='Enter')Admin.checkPassword()">
-  <button onclick="Admin.checkPassword()">Увійти</button>
+  <input type="email" id="admin-email" placeholder="Email" style="margin-bottom:10px" onkeydown="if(event.key==='Enter')Admin.login()">
+  <input type="password" id="admin-password" placeholder="Пароль" onkeydown="if(event.key==='Enter')Admin.login()">
+  <button onclick="Admin.login()">Увійти</button>
   <p id="login-error"></p>
 </div>
 

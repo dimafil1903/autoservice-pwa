@@ -2,15 +2,16 @@ const Admin = {
   masters: [],
 
   init() {
-    const savedUrl = localStorage.getItem('adminScriptUrl') || CONFIG.ADMIN_SCRIPT_URL;
-    if (savedUrl) AdminDB.init(savedUrl);
+    DB.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_SERVICE_KEY || CONFIG.SUPABASE_ANON_KEY);
 
-    const authed = sessionStorage.getItem('adminAuthed');
-    if (!authed) {
-      this.showLogin();
-    } else {
+    // Перевіряємо сесію
+    const session = JSON.parse(localStorage.getItem('as_session') || 'null');
+    if (session && session.role === 'admin') {
+      DB._authToken = session.access_token;
       this.showPanel();
       this.load();
+    } else {
+      this.showLogin();
     }
   },
 
@@ -19,17 +20,42 @@ const Admin = {
     document.getElementById('admin-panel').style.display = 'none';
   },
 
-  checkPassword() {
-    const pw = document.getElementById('admin-password').value;
-    if (pw === CONFIG.ADMIN_PASSWORD) {
-      sessionStorage.setItem('adminAuthed', '1');
+  async login() {
+    const email    = document.getElementById('admin-email').value.trim();
+    const password = document.getElementById('admin-password').value;
+    const err      = document.getElementById('login-error');
+    err.textContent = '';
+
+    try {
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: { 'apikey': CONFIG.SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) { err.textContent = '❌ ' + (data.error_description || 'Невірний логін'); return; }
+
+      const role = data.user?.user_metadata?.role;
+      if (role !== 'admin') { err.textContent = '❌ Немає прав адміна'; return; }
+
+      // Зберігаємо сесію (30 днів)
+      localStorage.setItem('as_session', JSON.stringify({
+        access_token: data.access_token, refresh_token: data.refresh_token,
+        role: 'admin', user_id: data.user.id,
+        expires_at: Date.now() + 30 * 24 * 3600 * 1000
+      }));
+
+      DB._authToken = data.access_token;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('admin-panel').style.display = 'block';
       this.load();
-    } else {
-      document.getElementById('login-error').textContent = '❌ Невірний пароль';
+    } catch (e) {
+      err.textContent = '❌ Помилка з\'єднання';
     }
   },
+
+  // Залишаємо для сумісності
+  checkPassword() { this.login(); },
 
   showPanel() {
     document.getElementById('login-screen').style.display = 'none';

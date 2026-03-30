@@ -16,12 +16,13 @@ const Onboarding = {
       }
     }
 
-    // Case 2: invite link — ?invite=TOKEN
+    // Case 2: invite link — ?invite=TOKEN → показуємо форму реєстрації
     if (params.get('invite')) {
       const token = params.get('invite');
-      localStorage.setItem('inviteToken', token);
       history.replaceState({}, '', location.pathname);
-      this.showWelcome(token);
+      // Показуємо login screen з відкритою формою реєстрації
+      App.showScreen('screen-login');
+      setTimeout(() => Auth.showRegisterForm(token), 100);
       return true;
     }
 

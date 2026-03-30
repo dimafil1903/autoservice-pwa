@@ -7,9 +7,9 @@ const App = {
     }
     Finance.init();
 
-    // Onboarding check comes first (invite tokens, setup=done redirect)
+    // Onboarding check (invite tokens)
     const handled = Onboarding.check();
-    if (!handled) Auth.init();
+    if (!handled) await Auth.init();
   },
 
   showMain() {
