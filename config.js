@@ -1,8 +1,9 @@
-// Налаштуйте перед використанням
+// ⚠️ Цей файл — шаблон. Реальні значення інжектуються через GitHub Actions secrets.
+// Для локальної розробки — заповни вручну (не комітити!).
 const CONFIG = {
-  ADMIN_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxGUkCyTCFmtJcCMNhBbv_A71cI6wqNaZoUlvbtmQvduUvP5wQ9XDAZNiVRXgu-S_AeYw/exec',
-  TEMPLATE_SHEET_ID: '1fabtCx5Bep6Pt80J050Cp7Fi0VQ6WnpaIFNPYnWYOn8',
+  ADMIN_SCRIPT_URL: '',   // встановлюється через GitHub Secret: ADMIN_SCRIPT_URL
+  TEMPLATE_SHEET_ID: '',  // встановлюється через GitHub Secret: TEMPLATE_SHEET_ID
   PWA_URL: 'https://dimafil1903.github.io/autoservice-pwa/',
   APP_VERSION: '1.0.0',
-  ADMIN_PASSWORD: 'admin123'  // змініть!
+  ADMIN_PASSWORD: ''      // встановлюється через GitHub Secret: ADMIN_PASSWORD
 };
