@@ -2,7 +2,7 @@ const Admin = {
   masters: [],
 
   init() {
-    DB.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_SERVICE_KEY || CONFIG.SUPABASE_ANON_KEY);
+    DB.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
     // Перевіряємо сесію
     const session = JSON.parse(localStorage.getItem('as_session') || 'null');
