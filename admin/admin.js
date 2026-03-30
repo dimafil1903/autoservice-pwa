@@ -94,16 +94,28 @@ const Admin = {
     document.getElementById('modal-add-master').style.display = 'none';
   },
 
+  async generateInvite() {
+    try {
+      const res = await AdminDB.post('generateInvite', {});
+      const box = document.getElementById('invite-result');
+      box.classList.remove('hidden');
+      document.getElementById('invite-url').textContent = res.url;
+      document.getElementById('invite-token').textContent = res.token;
+    } catch { alert('Помилка генерації токену'); }
+  },
+
+  copyInvite() {
+    const url = document.getElementById('invite-url').textContent;
+    navigator.clipboard.writeText(url).then(() => alert('Посилання скопійовано!'));
+  },
+
   async saveMaster() {
     const name       = document.getElementById('master-name').value.trim();
     const phone      = document.getElementById('master-phone').value.trim();
     const script_url = document.getElementById('master-script-url').value.trim();
-    const pin        = document.getElementById('master-pin').value.trim();
-
-    if (!name || !pin) { alert('Ім\'я та PIN обов\'язкові'); return; }
 
     try {
-      await AdminDB.addMaster({ name, phone, script_url, pin, status: 'active' });
+      await AdminDB.post('registerMaster', { name, phone, scriptUrl: script_url, status: 'active' });
       this.hideAddForm();
       this.load();
     } catch { alert('Помилка збереження'); }

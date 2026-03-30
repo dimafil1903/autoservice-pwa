@@ -78,8 +78,19 @@
 <div id="admin-panel">
   <header>
     <h1>🔧 Автосервіс — Адмін</h1>
-    <button class="btn btn-primary" onclick="Admin.showAddForm()">+ Додати майстра</button>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="Admin.generateInvite()">🔗 Згенерувати invite</button>
+      <button class="btn btn-secondary" onclick="Admin.showAddForm()">+ Вручну</button>
+    </div>
   </header>
+
+  <!-- Invite result box -->
+  <div id="invite-result" class="hidden" style="background:#16213e;border:1px solid #2a3a5a;border-radius:12px;padding:16px;margin-bottom:20px">
+    <div style="font-weight:600;margin-bottom:8px">✅ Посилання для майстра:</div>
+    <div id="invite-url" style="word-break:break-all;font-size:0.85rem;color:#64b5f6;margin-bottom:8px"></div>
+    <div style="font-size:0.78rem;color:#8899aa;margin-bottom:12px">Токен: <span id="invite-token"></span></div>
+    <button class="btn btn-secondary" style="font-size:0.85rem;padding:8px 16px" onclick="Admin.copyInvite()">📋 Скопіювати</button>
+  </div>
 
   <table>
     <thead>
@@ -101,7 +112,6 @@
     <div class="form-group"><label>Ім'я *</label><input id="master-name" placeholder="Іваненко Іван"></div>
     <div class="form-group"><label>Телефон</label><input id="master-phone" placeholder="+380..."></div>
     <div class="form-group"><label>Script URL</label><input id="master-script-url" placeholder="https://script.google.com/..."></div>
-    <div class="form-group"><label>PIN (4 цифри) *</label><input id="master-pin" type="text" maxlength="4" placeholder="1234"></div>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="Admin.saveMaster()">Зберегти</button>
       <button class="btn btn-secondary" onclick="Admin.hideAddForm()">Скасувати</button>

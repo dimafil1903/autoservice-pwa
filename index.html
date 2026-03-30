@@ -13,6 +13,67 @@
 </head>
 <body>
 
+<!-- ──────────────── ONBOARDING: WELCOME ──────────── -->
+<div id="screen-onboarding-welcome" class="screen" style="align-items:center;justify-content:center;padding:32px;text-align:center">
+  <div style="font-size:3.5rem;margin-bottom:16px">🔧</div>
+  <h1 style="font-size:1.6rem;margin-bottom:8px">Налаштування автосервісу</h1>
+  <p style="color:var(--text-muted);margin-bottom:32px">Привіт! Давай налаштуємо твій додаток за 2 хвилини.</p>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:320px;text-align:left;margin-bottom:32px">
+    <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px">Що відбудеться:</div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:0.9rem">
+      <div>✅ Створимо твою базу даних</div>
+      <div>✅ Налаштуємо доступ</div>
+      <div>✅ Все збережеться в хмарі</div>
+      <div>✅ Безкоштовно назавжди</div>
+    </div>
+  </div>
+
+  <input type="hidden" id="onboarding-token">
+  <button class="btn btn-primary" style="max-width:320px" onclick="Onboarding.startSetup()">Почати →</button>
+  <br><br>
+  <button class="btn btn-secondary btn-sm" onclick="Onboarding.manualUrl()">Вже маю URL скрипту</button>
+</div>
+
+<!-- ──────────────── ONBOARDING: SHEET COPY ────────── -->
+<div id="screen-onboarding-sheet" class="screen" style="align-items:center;justify-content:center;padding:32px;text-align:center">
+  <div style="font-size:3rem;margin-bottom:16px">📋</div>
+  <h1 style="font-size:1.4rem;margin-bottom:8px">Крок 1 з 2</h1>
+  <p style="color:var(--text-muted);margin-bottom:24px">У новій вкладці відкрився Google Sheet.</p>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:320px;text-align:left;margin-bottom:24px">
+    <div style="display:flex;flex-direction:column;gap:14px;font-size:0.9rem">
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.3rem">1️⃣</span><span>В Google натисни <strong>"Зробити копію"</strong></span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.3rem">2️⃣</span><span>Відкриється твій Sheet — натисни меню <strong>🔧 Автосервіс → Налаштувати</strong></span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.3rem">3️⃣</span><span>Дозволь доступ коли Google запитає</span></div>
+    </div>
+  </div>
+
+  <div id="onboarding-waiting-hint" class="hidden" style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:16px;font-size:0.85rem;color:var(--text-muted);max-width:320px">
+    ⏳ Після налаштування ти автоматично повернешся сюди
+  </div>
+
+  <button class="btn btn-secondary btn-sm" onclick="Onboarding.sheetCopied()">Я виконав кроки ↑</button>
+</div>
+
+<!-- ──────────────── ONBOARDING: COMPLETE ──────────── -->
+<div id="screen-onboarding-complete" class="screen" style="align-items:center;justify-content:center;padding:32px;text-align:center">
+  <div style="font-size:3.5rem;margin-bottom:16px">🎉</div>
+  <h1 style="font-size:1.6rem;margin-bottom:8px">Готово!</h1>
+  <p style="color:var(--text-muted);margin-bottom:32px">Твій додаток налаштований і готовий до роботи.</p>
+
+  <div id="ios-install-hint" class="hidden" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:100%;max-width:320px;text-align:left;margin-bottom:24px">
+    <div style="font-weight:600;margin-bottom:12px">📱 Додай на головний екран:</div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:0.88rem">
+      <div>1. Натисни кнопку <strong>Поділитися</strong> (□↑) в Safari</div>
+      <div>2. Прокрути вниз → <strong>"На початковий екран"</strong></div>
+      <div>3. Натисни <strong>"Додати"</strong></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" style="max-width:320px" onclick="Onboarding.enterApp()">Відкрити додаток →</button>
+</div>
+
 <!-- ──────────────── AUTH ──────────────────────────── -->
 <div id="screen-auth" class="screen active" style="display:flex">
   <div class="auth-logo">🔧</div>
@@ -358,6 +419,7 @@
 
 <script src="config.js"></script>
 <script src="js/db.js"></script>
+<script src="js/onboarding.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/clients.js"></script>
 <script src="js/orders.js"></script>

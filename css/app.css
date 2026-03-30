@@ -251,6 +251,9 @@ tr:last-child td { border-bottom: none; }
 .f-income { color: var(--success); }
 .f-expense { color: var(--danger); }
 
+/* ─── UTILITY ────────────────────────────────────────── */
+.hidden { display: none !important; }
+
 /* ─── EMPTY STATE ─────────────────────────────────────── */
 .empty-state { text-align: center; padding: 48px 16px; color: var(--text-muted); }
 .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; }

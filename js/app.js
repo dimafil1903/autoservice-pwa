@@ -6,7 +6,10 @@ const App = {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
     Finance.init();
-    Auth.init();
+
+    // Onboarding check comes first (invite tokens, setup=done redirect)
+    const handled = Onboarding.check();
+    if (!handled) Auth.init();
   },
 
   showMain() {
