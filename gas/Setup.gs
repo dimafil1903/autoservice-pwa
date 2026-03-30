@@ -8,7 +8,7 @@ var PWA_URL = 'https://dimafil1903.github.io/autoservice-pwa/';
 
 // URL Admin Apps Script (де зберігаються майстри)
 // Замінити після деплою Admin Script
-var ADMIN_SCRIPT_URL = '';
+var ADMIN_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUdW7hw6vs7cdb-EquGH_xuMl0ZqRFws4qcDHEl5MzxF1r6sE6VpENkkPVQ-S1JlldMg/exec';
 
 function onOpen() {
   SpreadsheetApp.getUi()
