@@ -3,6 +3,10 @@
 // Деплоїться ТІЛЬКИ в адміна (не в шаблоні майстра)
 // ═══════════════════════════════════════════════════════
 
+// ⚠️ Замінити на ID свого Admin Google Sheet
+// URL виглядає так: docs.google.com/spreadsheets/d/ЦЕ_І_Є_ID/edit
+var ADMIN_SHEET_ID = 'ЗАМІНИТИ_НА_СВІЙ_ID';
+
 function doGet(e) {
   try {
     var action = e.parameter.action;
@@ -44,7 +48,7 @@ function resp(data) {
 // ─── MASTERS SHEET ───────────────────────────────────────
 
 function getMastersSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(ADMIN_SHEET_ID);
   var sheet = ss.getSheetByName('masters');
   if (!sheet) {
     sheet = ss.insertSheet('masters');
@@ -70,7 +74,7 @@ function getMasters() {
 // ─── INVITE TOKENS ───────────────────────────────────────
 
 function getInvitesSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(ADMIN_SHEET_ID);
   var sheet = ss.getSheetByName('invites');
   if (!sheet) {
     sheet = ss.insertSheet('invites');
