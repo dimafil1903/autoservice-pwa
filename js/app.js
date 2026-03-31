@@ -79,7 +79,6 @@ const App = {
     document.getElementById('settings-fop-address').value = localStorage.getItem('fopAddress') || '';
     document.getElementById('settings-fop-phone').value   = localStorage.getItem('fopPhone')   || '';
     document.getElementById('settings-fop-city').value    = localStorage.getItem('fopCity')    || '';
-    document.getElementById('settings-script-url').value  = localStorage.getItem('scriptUrl')  || '';
   },
 
   saveSettings() {
@@ -88,8 +87,6 @@ const App = {
     localStorage.setItem('fopAddress', document.getElementById('settings-fop-address').value.trim());
     localStorage.setItem('fopPhone',   document.getElementById('settings-fop-phone').value.trim());
     localStorage.setItem('fopCity',    document.getElementById('settings-fop-city').value.trim());
-    const url = document.getElementById('settings-script-url').value.trim();
-    if (url) { localStorage.setItem('scriptUrl', url); DB.init(url); }
     this.toast('Збережено ✓', 'success');
   },
 

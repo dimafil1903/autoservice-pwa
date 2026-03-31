@@ -67,33 +67,32 @@ const Admin = {
 
   async load() {
     const tbody = document.getElementById('masters-tbody');
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px">Завантаження...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px">Завантаження...</td></tr>';
     try {
       this.masters = await AdminDB.getMasters();
       this.render();
     } catch (e) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#f44336">Помилка завантаження</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#f44336">Помилка завантаження</td></tr>';
     }
   },
 
   render() {
     const tbody = document.getElementById('masters-tbody');
     if (!this.masters.length) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">Майстрів немає</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">Майстрів немає</td></tr>';
       return;
     }
     tbody.innerHTML = this.masters.map(m => `
       <tr>
-        <td>${m.master_id || '—'}</td>
+        <td>${m.id ? m.id.slice(-8) : '—'}</td>
         <td>${m.name || '—'}</td>
         <td>${m.phone || '—'}</td>
-        <td><small style="word-break:break-all">${m.script_url || '—'}</small></td>
         <td><span class="status-badge ${m.status}">${m.status === 'active' ? '✅ Активний' : '❌ Заблоковано'}</span></td>
         <td>${m.registered_at || '—'}</td>
         <td>
           ${m.status === 'active'
-            ? `<button class="btn-action danger" onclick="Admin.block('${m.master_id}')">Блок</button>`
-            : `<button class="btn-action success" onclick="Admin.unblock('${m.master_id}')">Розблок</button>`
+            ? `<button class="btn-action danger" onclick="Admin.block('${m.id}')">Блок</button>`
+            : `<button class="btn-action success" onclick="Admin.unblock('${m.id}')">Розблок</button>`
           }
         </td>
       </tr>
@@ -125,7 +124,7 @@ const Admin = {
 
   async generateInvite() {
     try {
-      const res = await AdminDB.post('generateInvite', {});
+      const res = await AdminDB.generateInvite();
       const box = document.getElementById('invite-result');
       box.classList.remove('hidden');
       document.getElementById('invite-url').textContent = res.url;
@@ -139,12 +138,11 @@ const Admin = {
   },
 
   async saveMaster() {
-    const name       = document.getElementById('master-name').value.trim();
-    const phone      = document.getElementById('master-phone').value.trim();
-    const script_url = document.getElementById('master-script-url').value.trim();
+    const name  = document.getElementById('master-name').value.trim();
+    const phone = document.getElementById('master-phone').value.trim();
 
     try {
-      await AdminDB.post('registerMaster', { name, phone, scriptUrl: script_url, status: 'active' });
+      await AdminDB.addMaster({ name, phone, status: 'active' });
       this.hideAddForm();
       this.load();
     } catch { alert('Помилка збереження'); }

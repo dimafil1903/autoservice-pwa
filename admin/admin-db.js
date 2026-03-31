@@ -6,17 +6,23 @@ const AdminDB = {
     }
   },
 
-  async get(table, params) {
+  async getMasters() {
     this._init();
-    return DB._get(table, params);
+    return DB.getMasters();
   },
 
-  async post(action, data) {
+  async updateStatus(id, status) {
     this._init();
-    if (action === 'generateInvite') return DB.generateInvite();
-    if (action === 'getMasters')     return DB.getMasters();
-    if (action === 'registerMaster') return DB.addMaster(data);
-    if (action === 'updateMasterStatus') return DB.updateMasterStatus(data.id, data.status);
-    throw new Error('Unknown action: ' + action);
+    return DB.updateMasterStatus(id, status);
+  },
+
+  async generateInvite() {
+    this._init();
+    return DB.generateInvite();
+  },
+
+  async addMaster(data) {
+    this._init();
+    return DB.addMaster(data);
   }
 };

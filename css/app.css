@@ -92,7 +92,7 @@ body {
   border-radius: 20px; font-size: 0.75rem; font-weight: 600;
 }
 .badge-new      { background: #1e3a5f; color: #64b5f6; }
-.badge-progress { background: #3e2800; color: #ffb300; }
+.badge-progress, .badge-in_progress { background: #3e2800; color: #ffb300; }
 .badge-done     { background: #1b3a1b; color: var(--success); }
 .badge-closed   { background: #2a2a2a; color: #999; }
 

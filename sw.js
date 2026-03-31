@@ -1,4 +1,4 @@
-const CACHE_NAME = 'autoservice-v1';
+const CACHE_NAME = 'autoservice-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   './css/app.css',
   './js/app.js',
   './js/db.js',
+  './js/onboarding.js',
   './js/auth.js',
   './js/clients.js',
   './js/orders.js',
@@ -31,7 +32,7 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('script.google.com')) return; // не кешуємо API
+  if (e.request.url.includes('supabase.co')) return; // не кешуємо API
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
