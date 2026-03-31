@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router'
 import { AuthProvider, useAuth } from '@/lib/auth'
 import { AppShell } from '@/components/layout/AppShell'
 import { Toaster } from 'sonner'
@@ -26,8 +26,9 @@ function Loading() {
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth()
+  const location = useLocation()
   if (loading) return <Loading />
-  if (!session) return <Navigate to="/login" replace />
+  if (!session) return <Navigate to={`/login${location.search}`} replace />
   return <>{children}</>
 }
 
