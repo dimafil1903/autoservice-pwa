@@ -34,6 +34,26 @@
 /* Prevent iOS input zoom (inputs < 16px get auto-zoomed) */
 input, select, textarea { font-size: 16px !important; }
 
+/* Prevent pinch-to-zoom on iOS */
+html { touch-action: manipulation; }
+
+/* Fix date/month inputs overflow on mobile */
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime-local"] {
+  max-width: 100%;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Prevent horizontal overflow globally */
+#root { overflow-x: hidden; max-width: 100vw; }
+
+/* Fix grid children overflow (inputs in 2-col grids) */
+.grid > * { min-width: 0; }
+
 /* iOS momentum scroll */
 .scroll-touch { -webkit-overflow-scrolling: touch; }
 
