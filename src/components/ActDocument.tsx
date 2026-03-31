@@ -3,6 +3,28 @@ import autoTable from 'jspdf-autotable'
 import { db } from '@/lib/supabase'
 import type { Client, Car, Order, OrderItem } from '@/lib/types'
 
+const BASE = import.meta.env.BASE_URL || '/autoservice-pwa/'
+
+async function loadFonts(doc: jsPDF) {
+  const [regular, bold] = await Promise.all([
+    fetch(`${BASE}fonts/Roboto-Regular.ttf`).then(r => r.arrayBuffer()),
+    fetch(`${BASE}fonts/Roboto-Bold.ttf`).then(r => r.arrayBuffer()),
+  ])
+
+  const toBase64 = (buf: ArrayBuffer) => {
+    const bytes = new Uint8Array(buf)
+    let binary = ''
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
+    return btoa(binary)
+  }
+
+  doc.addFileToVFS('Roboto-Regular.ttf', toBase64(regular))
+  doc.addFont('Roboto-Regular.ttf', 'Roboto', 'normal')
+  doc.addFileToVFS('Roboto-Bold.ttf', toBase64(bold))
+  doc.addFont('Roboto-Bold.ttf', 'Roboto', 'bold')
+  doc.setFont('Roboto')
+}
+
 export async function generateActPdf(orderId: string): Promise<Blob> {
   const [orders, items] = await Promise.all([
     db.getOrders() as Promise<Order[]>,
@@ -35,6 +57,8 @@ export async function generateActPdf(orderId: string): Promise<Blob> {
 
   // Create PDF (A4)
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+  await loadFonts(doc)
+
   const pageWidth = doc.internal.pageSize.getWidth()
   const margin = 15
   const contentWidth = pageWidth - margin * 2
@@ -42,7 +66,7 @@ export async function generateActPdf(orderId: string): Promise<Blob> {
 
   function addText(text: string, x: number, yPos: number, options: { fontSize?: number; fontStyle?: string; align?: 'left' | 'center' | 'right'; maxWidth?: number } = {}) {
     doc.setFontSize(options.fontSize || 10)
-    doc.setFont('helvetica', options.fontStyle || 'normal')
+    doc.setFont('Roboto', options.fontStyle || 'normal')
     if (options.align === 'center') {
       doc.text(text, pageWidth / 2, yPos, { align: 'center' })
     } else if (options.align === 'right') {
@@ -59,10 +83,10 @@ export async function generateActPdf(orderId: string): Promise<Blob> {
   }
 
   function addRow(label: string, value: string, yPos: number): number {
-    doc.setFont('helvetica', 'bold')
+    doc.setFont('Roboto', 'bold')
     doc.setFontSize(9)
     doc.text(label, margin, yPos)
-    doc.setFont('helvetica', 'normal')
+    doc.setFont('Roboto', 'normal')
     doc.text(value, margin + 50, yPos)
     return yPos + 5
   }
@@ -144,7 +168,7 @@ export async function generateActPdf(orderId: string): Promise<Blob> {
       ['', '', '', '', { content: 'Вартість матеріалів:', styles: { halign: 'right', fontStyle: 'bold' } }, partsTotal.toFixed(2)],
       ['', '', '', '', { content: 'РАЗОМ:', styles: { halign: 'right', fontStyle: 'bold', fontSize: 10 } }, { content: total.toFixed(2), styles: { fontStyle: 'bold', fontSize: 10 } }],
     ],
-    styles: { fontSize: 8, cellPadding: 2, font: 'helvetica' },
+    styles: { fontSize: 8, cellPadding: 2, font: 'Roboto' },
     headStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
     footStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
     columnStyles: {
@@ -195,11 +219,11 @@ export async function generateActPdf(orderId: string): Promise<Blob> {
   const rightX = margin + sigWidth + 10
 
   doc.setFontSize(9)
-  doc.setFont('helvetica', 'bold')
+  doc.setFont('Roboto', 'bold')
   doc.text('ВИКОНАВЕЦЬ:', leftX, y)
   doc.text('ЗАМОВНИК:', rightX, y)
   y += 5
-  doc.setFont('helvetica', 'normal')
+  doc.setFont('Roboto', 'normal')
   doc.text('Майстер-приймальник:', leftX, y)
   y += 15
   doc.line(leftX, y, leftX + sigWidth, y)
