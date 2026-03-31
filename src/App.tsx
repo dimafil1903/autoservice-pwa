@@ -61,7 +61,7 @@ export default function App() {
     <BrowserRouter basename="/autoservice-pwa">
       <AuthProvider>
         <AppRoutes />
-        <Toaster position="bottom-center" richColors closeButton />
+        <Toaster position="top-center" richColors duration={1500} />
       </AuthProvider>
     </BrowserRouter>
   )
