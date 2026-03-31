@@ -1,18 +1,18 @@
-const CACHE_NAME = 'autoservice-v2';
+const CACHE_NAME = 'autoservice-v3';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './config.js',
+  './config.js?v=2',
   './css/app.css',
-  './js/app.js',
-  './js/db.js',
-  './js/onboarding.js',
-  './js/auth.js',
-  './js/clients.js',
-  './js/orders.js',
-  './js/finance.js',
-  './js/docs.js'
+  './js/app.js?v=2',
+  './js/db.js?v=2',
+  './js/onboarding.js?v=2',
+  './js/auth.js?v=2',
+  './js/clients.js?v=2',
+  './js/orders.js?v=2',
+  './js/finance.js?v=2',
+  './js/docs.js?v=2'
 ];
 
 self.addEventListener('install', e => {
