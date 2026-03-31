@@ -3,8 +3,8 @@ import { BottomNav } from './BottomNav'
 
 export function AppShell() {
   return (
-    <div className="min-h-dvh bg-background flex flex-col">
-      <div className="flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))]">
+    <div className="flex flex-col h-dvh bg-background overflow-hidden">
+      <div className="flex-1 overflow-y-auto scroll-touch">
         <Outlet />
       </div>
       <BottomNav />
