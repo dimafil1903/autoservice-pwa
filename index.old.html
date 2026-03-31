@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563EB">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Автосервіс">
+  <title>Автосервіс</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ──────────────── LOGIN ────────────────────────── -->
+<div id="screen-login" class="screen" style="align-items:center;justify-content:center;padding:32px">
+  <div style="width:100%;max-width:360px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div class="auth-logo"><i data-lucide="wrench"></i></div>
+      <h1 style="font-size:1.5rem;margin-bottom:4px">Автосервіс</h1>
+      <p style="color:var(--text-muted);font-size:0.9rem">Увійдіть у свій акаунт</p>
+    </div>
+
+    <div id="login-form">
+      <div class="form-group"><label>Email</label>
+        <input id="login-email" type="email" placeholder="master@example.com" autocomplete="email">
+      </div>
+      <div class="form-group"><label>Пароль</label>
+        <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <p id="login-error" style="color:var(--danger);font-size:0.85rem;margin-bottom:12px;min-height:20px"></p>
+      <button id="btn-login" class="btn btn-primary" onclick="Auth.login(document.getElementById('login-email').value, document.getElementById('login-password').value)">Увійти</button>
+      <div style="text-align:center;margin-top:16px">
+        <button class="btn btn-secondary btn-sm" onclick="Auth.showResetForm()">Забули пароль?</button>
+        <span style="color:var(--border);margin:0 8px">·</span>
+        <button class="btn btn-secondary btn-sm" onclick="Auth.showRegisterForm()">Реєстрація</button>
+      </div>
+    </div>
+
+    <!-- Register form (показується якщо є invite в URL) -->
+    <div id="register-form" class="hidden">
+      <div style="text-align:center;margin-bottom:20px">
+        <h2 style="font-size:1.1rem">Створити акаунт</h2>
+        <p style="color:var(--text-muted);font-size:0.82rem" id="register-invite-info"></p>
+      </div>
+      <div class="form-group"><label>Ваше ім'я</label>
+        <input id="register-name" type="text" placeholder="Іваненко Іван">
+      </div>
+      <div class="form-group"><label>Email</label>
+        <input id="register-email" type="email" placeholder="ivan@example.com">
+      </div>
+      <div class="form-group"><label>Пароль (мін. 6 символів)</label>
+        <input id="register-password" type="password" placeholder="••••••••">
+      </div>
+      <input type="hidden" id="register-invite-token">
+      <p id="register-error" style="color:var(--danger);font-size:0.85rem;margin-bottom:12px;min-height:20px"></p>
+      <button class="btn btn-primary" onclick="Auth.register(
+        document.getElementById('register-email').value,
+        document.getElementById('register-password').value,
+        document.getElementById('register-name').value,
+        document.getElementById('register-invite-token').value
+      )">Зареєструватись</button>
+      <div style="text-align:center;margin-top:12px">
+        <button class="btn btn-secondary btn-sm" onclick="Auth.showLoginForm()">← Назад до входу</button>
+      </div>
+    </div>
+
+    <!-- Reset form -->
+    <div id="reset-form" class="hidden">
+      <div style="text-align:center;margin-bottom:20px">
+        <h2 style="font-size:1.1rem">Відновлення пароля</h2>
+      </div>
+      <div class="form-group"><label>Email</label>
+        <input id="reset-email" type="email" placeholder="master@example.com">
+      </div>
+      <button class="btn btn-primary" onclick="Auth.resetPassword(document.getElementById('reset-email').value).then(()=>Auth.showLoginForm())">Надіслати лист</button>
+      <div style="text-align:center;margin-top:12px">
+        <button class="btn btn-secondary btn-sm" onclick="Auth.showLoginForm()">← Назад</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- ──────────────── DASHBOARD ─────────────────────── -->
+<div id="screen-dashboard" class="screen">
+  <div class="screen-header">
+    <h1><i data-lucide="home"></i> Дашборд</h1>
+  </div>
+  <div class="screen-body">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-today">—</div>
+        <div class="stat-label">Замовлень сьогодні</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-active">—</div>
+        <div class="stat-label">В роботі</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-revenue">—</div>
+        <div class="stat-label">Виручка за місяць</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-clients">—</div>
+        <div class="stat-label">Клієнтів</div>
+      </div>
+    </div>
+    <div class="section-title" style="margin-top:8px">Швидкі дії</div>
+    <div class="quick-grid">
+      <div class="quick-btn" onclick="Orders.showNewOrderForm()">
+        <div class="qb-icon"><i data-lucide="plus"></i></div>
+        <span>Нове замовлення</span>
+      </div>
+      <div class="quick-btn" onclick="Clients.showAddForm()">
+        <div class="qb-icon"><i data-lucide="user-plus"></i></div>
+        <span>Новий клієнт</span>
+      </div>
+      <div class="quick-btn" onclick="App.navigate('orders')">
+        <div class="qb-icon"><i data-lucide="clipboard-list"></i></div>
+        <span>Всі замовлення</span>
+      </div>
+      <div class="quick-btn" onclick="Finance.showAddForm()">
+        <div class="qb-icon"><i data-lucide="credit-card"></i></div>
+        <span>Додати транзакцію</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────── CLIENTS ───────────────────────── -->
+<div id="screen-clients" class="screen">
+  <div class="screen-header">
+    <h1><i data-lucide="users"></i> Клієнти</h1>
+  </div>
+  <div class="screen-body">
+    <div class="search-box">
+      <span class="search-icon"><i data-lucide="search"></i></span>
+      <input type="search" placeholder="Пошук клієнта..." oninput="Clients.search(this.value)">
+    </div>
+    <div id="clients-list">
+      <div class="loading-center"><div class="spinner"></div></div>
+    </div>
+  </div>
+  <button class="fab" onclick="Clients.showAddForm()">+</button>
+</div>
+
+<!-- ──────────────── CLIENT DETAIL ─────────────────── -->
+<div id="screen-client-detail" class="screen">
+  <div class="screen-header">
+    <button class="btn btn-secondary btn-sm btn-icon" onclick="App.navigate('clients')">←</button>
+    <h1 id="client-detail-name">Клієнт</h1>
+  </div>
+  <div class="screen-body">
+    <div class="card">
+      <div class="section-title">Контакти</div>
+      <div id="client-detail-phone" style="font-size:1rem;margin-top:4px"></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="section-title" style="margin:0">Автомобілі</div>
+        <button class="btn btn-secondary btn-sm" id="btn-add-car" onclick="Clients.showAddCarForm(this.dataset.clientId)">+ Авто</button>
+      </div>
+      <div id="client-cars"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────── ORDERS ────────────────────────── -->
+<div id="screen-orders" class="screen">
+  <div class="screen-header">
+    <h1><i data-lucide="clipboard-list"></i> Замовлення</h1>
+  </div>
+  <div class="screen-body">
+    <div class="tabs">
+      <button class="tab-btn active" data-filter="all"      onclick="Orders.filter('all')">Всі</button>
+      <button class="tab-btn"        data-filter="new"       onclick="Orders.filter('new')">Нові</button>
+      <button class="tab-btn"        data-filter="in_progress" onclick="Orders.filter('in_progress')">В роботі</button>
+      <button class="tab-btn"        data-filter="done"     onclick="Orders.filter('done')">Виконані</button>
+      <button class="tab-btn"        data-filter="closed"   onclick="Orders.filter('closed')">Закриті</button>
+    </div>
+    <div id="orders-list">
+      <div class="loading-center"><div class="spinner"></div></div>
+    </div>
+  </div>
+  <button class="fab" onclick="Orders.showNewOrderForm()">+</button>
+</div>
+
+<!-- ──────────────── ORDER DETAIL ──────────────────── -->
+<div id="screen-order-detail" class="screen">
+  <div class="screen-header">
+    <button class="btn btn-secondary btn-sm btn-icon" onclick="App.navigate('orders')">←</button>
+    <h1>Замовлення</h1>
+  </div>
+  <div class="screen-body">
+    <div id="order-detail-body">
+      <div class="loading-center"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────── FINANCE ───────────────────────── -->
+<div id="screen-finance" class="screen">
+  <div class="screen-header">
+    <h1><i data-lucide="wallet"></i> Фінанси</h1>
+  </div>
+  <div class="screen-body">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <input type="month" id="finance-month" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-size:0.9rem;outline:none" onchange="Finance.load(this.value)">
+    </div>
+    <div id="finance-summary"></div>
+    <div class="section-title" style="margin-top:8px">Транзакції</div>
+    <div id="finance-list">
+      <div class="loading-center"><div class="spinner"></div></div>
+    </div>
+  </div>
+  <button class="fab" onclick="Finance.showAddForm()">+</button>
+</div>
+
+<!-- ──────────────── SETTINGS ──────────────────────── -->
+<div id="screen-settings" class="screen">
+  <div class="screen-header">
+    <h1><i data-lucide="settings"></i> Налаштування</h1>
+  </div>
+  <div class="screen-body">
+    <div class="settings-section">
+      <div class="section-title">Дані ФОП</div>
+      <div class="form-group"><label>ПІБ / Назва ФОП</label><input id="settings-fop-name" placeholder="Іваненко Іван Іванович"></div>
+      <div class="form-group"><label>ІПН</label><input id="settings-fop-ipn" placeholder="1234567890"></div>
+      <div class="form-group"><label>Адреса</label><input id="settings-fop-address" placeholder="вул. Механізаторів, 15"></div>
+      <div class="form-group"><label>Телефон</label><input id="settings-fop-phone" placeholder="+380..."></div>
+      <div class="form-group"><label>Місто</label><input id="settings-fop-city" placeholder="Київ"></div>
+    </div>
+
+    <button class="btn btn-secondary" style="width:100%;margin-bottom:8px" onclick="App.testConnection()">Тест з'єднання</button>
+
+    <button class="btn btn-primary" onclick="App.saveSettings()">Зберегти</button>
+
+    <div style="margin-top:24px;text-align:center">
+      <button class="btn btn-secondary btn-sm" onclick="if(confirm('Вийти?'))Auth.logout()">Вийти</button>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────── BOTTOM NAV ────────────────────── -->
+<nav id="bottom-nav" class="hidden">
+  <button class="nav-tab" data-tab="dashboard" onclick="App.navigate('dashboard')">
+    <span class="nav-icon"><i data-lucide="home"></i></span>Головна
+  </button>
+  <button class="nav-tab" data-tab="clients" onclick="App.navigate('clients')">
+    <span class="nav-icon"><i data-lucide="users"></i></span>Клієнти
+  </button>
+  <button class="nav-tab" data-tab="orders" onclick="App.navigate('orders')">
+    <span class="nav-icon"><i data-lucide="clipboard-list"></i></span>Замовлення
+  </button>
+  <button class="nav-tab" data-tab="finance" onclick="App.navigate('finance')">
+    <span class="nav-icon"><i data-lucide="wallet"></i></span>Фінанси
+  </button>
+  <button class="nav-tab" data-tab="settings" onclick="App.navigate('settings')">
+    <span class="nav-icon"><i data-lucide="settings"></i></span>Налаштування
+  </button>
+</nav>
+
+<!-- ──────────────── TOAST ─────────────────────────── -->
+<div id="toast"></div>
+
+<!-- ──────────────── MODALS ────────────────────────── -->
+
+<!-- Add Client -->
+<div class="modal-overlay" id="modal-add-client">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Новий клієнт</h2>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Clients.hideAddForm()"><i data-lucide="x"></i></button>
+    </div>
+    <form id="form-add-client" onsubmit="return false">
+      <div class="form-group"><label>Ім'я / Компанія *</label><input id="client-name" placeholder="Іваненко Іван"></div>
+      <div class="form-group"><label>Телефон</label><input id="client-phone" type="tel" placeholder="+380..."></div>
+    </form>
+    <button class="btn btn-primary" onclick="Clients.save()">Зберегти</button>
+  </div>
+</div>
+
+<!-- Add Car -->
+<div class="modal-overlay" id="modal-add-car">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Нове авто</h2>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Clients.hideAddCarForm()"><i data-lucide="x"></i></button>
+    </div>
+    <form id="form-add-car" onsubmit="return false">
+      <input type="hidden" id="car-client-id">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group"><label>Марка *</label><input id="car-brand" placeholder="Toyota"></div>
+        <div class="form-group"><label>Модель *</label><input id="car-model" placeholder="Camry"></div>
+        <div class="form-group"><label>Рік</label><input id="car-year" type="number" placeholder="2018" min="1960" max="2030"></div>
+        <div class="form-group"><label>Колір</label><input id="car-color" placeholder="Сірий"></div>
+        <div class="form-group"><label>Держ. номер</label><input id="car-plate" placeholder="АА0000АА"></div>
+        <div class="form-group"><label>VIN</label><input id="car-vin" placeholder="VF1..."></div>
+      </div>
+    </form>
+    <button class="btn btn-primary" onclick="Clients.saveCar()">Зберегти</button>
+  </div>
+</div>
+
+<!-- Add Order Item -->
+<div class="modal-overlay" id="modal-add-item">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Додати позицію</h2>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Orders.hideAddItem()"><i data-lucide="x"></i></button>
+    </div>
+    <form id="form-add-item" onsubmit="return false">
+      <input type="hidden" id="item-order-id">
+      <div class="form-group">
+        <label>Тип</label>
+        <select id="item-type">
+          <option value="work">Робота</option>
+          <option value="part">Запчастина</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Назва *</label><input id="item-name" placeholder="Заміна масла"></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px">
+        <div class="form-group"><label>Кількість *</label><input id="item-qty" type="number" step="0.1" min="0.1" value="1"></div>
+        <div class="form-group"><label>Одиниця</label>
+          <select id="item-unit">
+            <option value="шт">шт</option>
+            <option value="год">год</option>
+            <option value="к-т">к-т</option>
+            <option value="л">л</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group"><label>Ціна, грн *</label><input id="item-price" type="number" step="0.01" min="0" placeholder="500"></div>
+        <div class="form-group"><label>Сума, грн</label><input id="item-total" type="number" step="0.01" readonly placeholder="500"></div>
+      </div>
+    </form>
+    <button class="btn btn-primary" onclick="Orders.saveItem()">Додати</button>
+  </div>
+</div>
+
+<!-- New Order -->
+<div class="modal-overlay" id="modal-new-order">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Нове замовлення</h2>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Orders.hideNewOrderForm()"><i data-lucide="x"></i></button>
+    </div>
+    <form id="form-new-order" onsubmit="return false">
+      <div class="form-group">
+        <label>Автомобіль *</label>
+        <select id="order-car-id"><option value="">Оберіть авто...</option></select>
+      </div>
+      <div class="form-group"><label>Опис проблеми *</label><textarea id="order-problem" placeholder="Стукіт при гальмуванні..."></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group"><label>Пробіг (км)</label><input id="order-mileage" type="number" placeholder="75000"></div>
+        <div class="form-group"><label>Дата прийому</label><input id="order-date-in" type="date"></div>
+      </div>
+    </form>
+    <button class="btn btn-primary" onclick="Orders.saveNewOrder()">Створити</button>
+  </div>
+</div>
+
+<!-- Add Finance -->
+<div class="modal-overlay" id="modal-add-finance">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Нова транзакція</h2>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Finance.hideAddForm()"><i data-lucide="x"></i></button>
+    </div>
+    <form id="form-add-finance" onsubmit="return false">
+      <div class="form-group">
+        <label>Тип</label>
+        <select id="finance-type">
+          <option value="income">Дохід</option>
+          <option value="expense">Витрата</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Сума, грн *</label><input id="finance-amount" type="number" step="0.01" min="0" placeholder="1500"></div>
+      <div class="form-group">
+        <label>Категорія</label>
+        <select id="finance-category">
+          <option value="Ремонт">Ремонт</option>
+          <option value="Запчастини">Запчастини</option>
+          <option value="Оренда">Оренда</option>
+          <option value="Інструменти">Інструменти</option>
+          <option value="Зарплата">Зарплата</option>
+          <option value="Інше">Інше</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Дата *</label><input id="finance-date" type="date"></div>
+      <div class="form-group"><label>Коментар</label><input id="finance-comment" placeholder="Замовлення #..."></div>
+    </form>
+    <button class="btn btn-primary" onclick="Finance.save()">Зберегти</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
+<script src="config.js?v=4"></script>
+<script src="js/db.js?v=4"></script>
+<script src="js/onboarding.js?v=4"></script>
+<script src="js/auth.js?v=4"></script>
+<script src="js/clients.js?v=4"></script>
+<script src="js/orders.js?v=4"></script>
+<script src="js/finance.js?v=4"></script>
+<script src="js/docs.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
+<script>document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });</script>
+</body>
+</html>
