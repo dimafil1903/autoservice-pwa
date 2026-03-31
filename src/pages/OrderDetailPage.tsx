@@ -1,12 +1,18 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router'
-import { Plus, Loader2, X, FileText } from 'lucide-react'
+import { Plus, Loader2, X, FileText, Printer } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { OrderItemForm } from '@/components/forms/OrderItemForm'
-import { generateAct } from '@/components/ActDocument'
+import { generateActHtml } from '@/components/ActDocument'
 import { db } from '@/lib/supabase'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -31,6 +37,8 @@ export default function OrderDetailPage() {
   const [itemFormOpen, setItemFormOpen] = useState(false)
   const [statusUpdating, setStatusUpdating] = useState(false)
   const [actLoading, setActLoading] = useState(false)
+  const [actHtml, setActHtml] = useState<string | null>(null)
+  const [actDialogOpen, setActDialogOpen] = useState(false)
 
   const loadData = useCallback(async () => {
     if (!id) return
@@ -88,7 +96,9 @@ export default function OrderDetailPage() {
     if (!id) return
     try {
       setActLoading(true)
-      await generateAct(id)
+      const html = await generateActHtml(id)
+      setActHtml(html)
+      setActDialogOpen(true)
     } catch (e) {
       toast.error('Помилка генерації акту')
       console.error(e)
@@ -292,6 +302,26 @@ export default function OrderDetailPage() {
           onSave={handleAddItem}
         />
       )}
+
+      {/* Act Dialog */}
+      <Dialog open={actDialogOpen} onOpenChange={setActDialogOpen}>
+        <DialogContent className="max-w-full h-[90dvh] p-0 gap-0" showCloseButton={false}>
+          <DialogHeader className="p-4 pb-2 flex-row items-center justify-between">
+            <DialogTitle>Акт</DialogTitle>
+            <Button size="sm" onClick={() => {
+              const iframe = document.getElementById('act-iframe') as HTMLIFrameElement
+              iframe?.contentWindow?.print()
+            }}>
+              <Printer size={16} /> Друк / PDF
+            </Button>
+          </DialogHeader>
+          <iframe
+            id="act-iframe"
+            srcDoc={actHtml || ''}
+            className="flex-1 w-full border-0 bg-white rounded-b-lg"
+          />
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

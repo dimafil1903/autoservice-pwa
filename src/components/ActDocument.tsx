@@ -1,7 +1,7 @@
 import { db } from '@/lib/supabase'
 import type { Client, Car, Order, OrderItem } from '@/lib/types'
 
-export async function generateAct(orderId: string) {
+export async function generateActHtml(orderId: string): Promise<string> {
   const [orders, items] = await Promise.all([
     db.getOrders() as Promise<Order[]>,
     db.getOrderItems(orderId) as Promise<OrderItem[]>,
@@ -87,13 +87,10 @@ export async function generateAct(orderId: string) {
     '  .signature-side { width: 45%; }',
     '  .signature-line { border-bottom: 1px solid #000; margin: 20px 0 4px; }',
     '  .note { font-size: 11px; color: #555; margin-top: 4px; }',
-    '  @media print { .no-print { display: none; } body { padding: 0; } }',
+    '  @media print { body { padding: 0; } }',
     '</style>',
     '</head>',
     '<body>',
-    '<div class="no-print" style="text-align:center;margin-bottom:16px">',
-    '  <button onclick="window.print()" style="padding:10px 24px;font-size:14px;background:#e94560;color:white;border:none;border-radius:8px;cursor:pointer">Друкувати</button>',
-    '</div>',
     '',
     '<p class="center" style="margin-bottom:4px">Примірник № ___</p>',
     `<h2>АКТ № ${actNum}</h2>`,
@@ -192,7 +189,5 @@ export async function generateAct(orderId: string) {
     '</html>',
   ].join('\n')
 
-  const blob = new Blob([html], { type: 'text/html' })
-  const url = URL.createObjectURL(blob)
-  window.open(url, '_blank')
+  return html
 }

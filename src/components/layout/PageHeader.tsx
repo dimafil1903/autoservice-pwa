@@ -13,17 +13,19 @@ export function PageHeader({
   const navigate = useNavigate()
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b bg-background px-4">
-      {back && (
-        <button
-          onClick={() => navigate(-1)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-      )}
-      {icon && <span className="text-primary">{icon}</span>}
-      <h1 className="text-lg font-semibold">{title}</h1>
+    <header className="sticky top-0 z-40 bg-background border-b border-border safe-top">
+      <div className="flex h-14 items-center gap-3 px-4">
+        {back && (
+          <button
+            onClick={() => navigate(-1)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+        )}
+        {icon && <span className="text-primary">{icon}</span>}
+        <h1 className="text-lg font-semibold">{title}</h1>
+      </div>
     </header>
   )
 }

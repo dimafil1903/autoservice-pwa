@@ -35,6 +35,12 @@ input, select, textarea { font-size: 16px !important; }
 /* iOS momentum scroll */
 .scroll-touch { -webkit-overflow-scrolling: touch; }
 
+/* Prevent keyboard popup on programmatic focus */
+button, [role="combobox"], [role="option"], [role="menuitem"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 /* Disable iOS tap highlight */
 * { -webkit-tap-highlight-color: transparent; }
 

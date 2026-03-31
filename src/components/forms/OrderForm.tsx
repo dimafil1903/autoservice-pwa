@@ -15,13 +15,20 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Loader2 } from 'lucide-react'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from '@/components/ui/command'
+import { Loader2, Check, ChevronsUpDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import type { Client, Car } from '@/lib/types'
 
 interface CarOption {
@@ -39,6 +46,8 @@ interface OrderFormProps {
 export function OrderForm({ open, onClose, onSave, defaultCarId }: OrderFormProps) {
   const [carOptions, setCarOptions] = useState<CarOption[]>([])
   const [loadingCars, setLoadingCars] = useState(false)
+  const [comboOpen, setComboOpen] = useState(false)
+  const [carSearch, setCarSearch] = useState('')
 
   const {
     register,
@@ -122,18 +131,44 @@ export function OrderForm({ open, onClose, onSave, defaultCarId }: OrderFormProp
                 control={control}
                 name="car_id"
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="h-11 w-full text-base">
-                      <SelectValue placeholder="Оберіть авто" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {carOptions.map((opt) => (
-                        <SelectItem key={opt.id} value={opt.id}>
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover open={comboOpen} onOpenChange={setComboOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={comboOpen}
+                        className="h-11 w-full justify-between text-base font-normal"
+                      >
+                        {field.value
+                          ? carOptions.find(o => o.id === field.value)?.label || 'Оберіть авто'
+                          : 'Оберіть авто'}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Пошук авто..." value={carSearch} onValueChange={setCarSearch} />
+                        <CommandList>
+                          <CommandEmpty>Нічого не знайдено</CommandEmpty>
+                          <CommandGroup>
+                            {carOptions.map(opt => (
+                              <CommandItem
+                                key={opt.id}
+                                value={opt.label}
+                                onSelect={() => {
+                                  field.onChange(opt.id)
+                                  setComboOpen(false)
+                                }}
+                              >
+                                <Check className={cn("mr-2 h-4 w-4", field.value === opt.id ? "opacity-100" : "opacity-0")} />
+                                {opt.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 )}
               />
             )}
