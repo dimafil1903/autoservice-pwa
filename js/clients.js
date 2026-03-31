@@ -119,7 +119,7 @@ const Clients = {
     if (!brand || !model) { App.toast('Марка та модель обов\'язкові', 'error'); return; }
 
     try {
-      await DB.addCar({ client_id: clientId, brand, model, year, plate, vin, color });
+      await DB.addCar({ client_id: clientId, brand, model, year: year ? parseInt(year) : null, plate: plate || null, vin: vin || null, color: color || null });
       this.hideAddCarForm();
       App.toast('Авто додано ✓', 'success');
       this.open(clientId);

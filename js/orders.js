@@ -238,7 +238,7 @@ const Orders = {
     if (!carId || !problem) { App.toast('Оберіть авто та вкажіть проблему', 'error'); return; }
 
     try {
-      const res = await DB.addOrder({ car_id: carId, problem, mileage, date_in: dateIn, status: 'new' });
+      const res = await DB.addOrder({ car_id: carId, problem, mileage: mileage ? parseInt(mileage) : null, date_in: dateIn || null, status: 'new' });
       this.hideNewOrderForm();
       App.toast('Замовлення створено ✓', 'success');
       await this.load();
