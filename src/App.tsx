@@ -1,8 +1,13 @@
+import { Button } from '@/components/ui/button'
+
 export default function App() {
-  return <div style={{ minHeight: '100dvh', background: '#0F172A', color: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <div style={{ textAlign: 'center' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2563EB' }}>Автосервіс</h1>
-      <p style={{ color: '#94A3B8', marginTop: '0.5rem' }}>React app loading...</p>
+  return (
+    <div className="min-h-dvh bg-background text-foreground flex items-center justify-center p-8">
+      <div className="text-center space-y-4">
+        <h1 className="text-2xl font-bold text-primary">Автосервіс</h1>
+        <p className="text-muted-foreground">Tailwind + shadcn working</p>
+        <Button>Test Button</Button>
+      </div>
     </div>
-  </div>
+  )
 }
