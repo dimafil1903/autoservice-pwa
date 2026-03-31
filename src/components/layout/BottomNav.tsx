@@ -34,7 +34,7 @@ export function BottomNav() {
   return (
     <nav className="shrink-0 bg-card border-t border-border">
       <div className="flex items-center justify-around">
-        {tabs.map(({ path, icon: Icon, label }) => {
+        {tabs.map(({ path, icon: Icon }) => {
           const active = path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)
           return (
             <button
