@@ -4,10 +4,10 @@ const Orders = {
   currentOrderId: null,
 
   STATUS_LABELS: {
-    new:         '🆕 Нове',
-    in_progress: '🔧 В роботі',
-    done:        '✅ Виконано',
-    closed:      '🔒 Закрито'
+    new:         'Нове',
+    in_progress: 'В роботі',
+    done:        'Виконано',
+    closed:      'Закрито'
   },
 
   async load() {
@@ -29,7 +29,7 @@ const Orders = {
 
     const list = document.getElementById('orders-list');
     if (!filtered.length) {
-      list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>Замовлень немає</p></div>`;
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i data-lucide="clipboard-list"></i></div><p>Замовлень немає</p></div>`;
       return;
     }
 
@@ -45,6 +45,7 @@ const Orders = {
         </div>
       </div>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   },
 
   filter(status) {
@@ -106,12 +107,12 @@ const Orders = {
               <tbody>
               ${items.map(i => `
                 <tr>
-                  <td>${i.name}<br><small style="color:var(--text-muted)">${i.type === 'work' ? '🔧 робота' : '⚙️ запч.'}</small></td>
+                  <td>${i.name}<br><small style="color:var(--text-muted)">${i.type === 'work' ? 'робота' : 'запчастина'}</small></td>
                   <td>${i.unit || 'шт'}</td>
                   <td class="col-num">${i.qty}</td>
                   <td class="col-num">${parseFloat(i.price).toFixed(0)}</td>
                   <td class="col-num">${parseFloat(i.total).toFixed(0)}</td>
-                  <td><button class="btn btn-danger btn-sm" onclick="Orders.deleteItem('${i.id}','${order.id}')">✕</button></td>
+                  <td><button class="btn btn-danger btn-sm" onclick="Orders.deleteItem('${i.id}','${order.id}')"><i data-lucide="x" style="width:14px;height:14px"></i></button></td>
                 </tr>
               `).join('')}
               </tbody>
@@ -135,14 +136,15 @@ const Orders = {
         </div>
       </div>
 
-      <button class="btn btn-primary" onclick="Docs.generateAct('${order.id}')">🖨️ Сформувати Акт</button>
+      <button class="btn btn-primary" onclick="Docs.generateAct('${order.id}')">Сформувати Акт</button>
     `;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   },
 
   async changeStatus(orderId, status) {
     try {
       await DB.updateOrder({ id: orderId, status });
-      App.toast('Статус оновлено ✓', 'success');
+      App.toast('Статус оновлено', 'success');
       this.open(orderId);
       this.load();
     } catch {
@@ -179,10 +181,15 @@ const Orders = {
 
     if (!name || !qty || !price) { App.toast('Заповніть всі поля', 'error'); return; }
 
+    const parsedQty = parseFloat(qty);
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedQty) || parsedQty <= 0) { App.toast('Невірна кількість', 'error'); return; }
+    if (isNaN(parsedPrice) || parsedPrice < 0) { App.toast('Невірна ціна', 'error'); return; }
+
     try {
       await DB.addOrderItem({ order_id: orderId, type, name, qty, unit, price, total });
       this.hideAddItem();
-      App.toast('Позицію додано ✓', 'success');
+      App.toast('Позицію додано', 'success');
       this.open(orderId);
     } catch {
       App.toast('Помилка', 'error');
@@ -193,7 +200,7 @@ const Orders = {
     if (!confirm('Видалити позицію?')) return;
     try {
       await DB.deleteOrderItem(itemId);
-      App.toast('Видалено ✓', 'success');
+      App.toast('Видалено', 'success');
       this.open(orderId);
     } catch {
       App.toast('Помилка', 'error');
@@ -240,7 +247,7 @@ const Orders = {
     try {
       const res = await DB.addOrder({ car_id: carId, problem, mileage: mileage ? parseInt(mileage) : null, date_in: dateIn || null, status: 'new' });
       this.hideNewOrderForm();
-      App.toast('Замовлення створено ✓', 'success');
+      App.toast('Замовлення створено', 'success');
       await this.load();
       if (res.id) this.open(res.id);
     } catch {

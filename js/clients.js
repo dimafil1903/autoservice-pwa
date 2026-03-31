@@ -18,12 +18,12 @@ const Clients = {
   render() {
     const list = document.getElementById('clients-list');
     if (!this.filtered.length) {
-      list.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>Клієнтів поки немає</p></div>`;
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i data-lucide="users"></i></div><p>Клієнтів поки немає</p></div>`;
       return;
     }
     list.innerHTML = this.filtered.map(c => `
       <div class="list-item" onclick="Clients.open('${c.id}')">
-        <div class="item-icon">👤</div>
+        <div class="item-icon"><i data-lucide="user"></i></div>
         <div class="item-body">
           <div class="item-title">${c.name}</div>
           <div class="item-sub">${c.phone || '—'}</div>
@@ -31,6 +31,7 @@ const Clients = {
         <div>›</div>
       </div>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   },
 
   search(q) {
@@ -57,13 +58,14 @@ const Clients = {
       } else {
         carsList.innerHTML = cars.map(car => `
           <div class="list-item" onclick="Orders.openNewForCar('${car.id}', '${client.name}')">
-            <div class="item-icon">🚗</div>
+            <div class="item-icon"><i data-lucide="car"></i></div>
             <div class="item-body">
               <div class="item-title">${car.brand} ${car.model} ${car.year || ''}</div>
               <div class="item-sub">${car.plate || ''} · ${car.vin || ''}</div>
             </div>
           </div>
         `).join('');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
       }
 
       // Store client id for add car
@@ -90,7 +92,7 @@ const Clients = {
     try {
       await DB.addClient({ name, phone });
       this.hideAddForm();
-      App.toast('Клієнта додано ✓', 'success');
+      App.toast('Клієнта додано', 'success');
       this.load();
     } catch {
       App.toast('Помилка збереження', 'error');
@@ -121,7 +123,7 @@ const Clients = {
     try {
       await DB.addCar({ client_id: clientId, brand, model, year: year ? parseInt(year) : null, plate: plate || null, vin: vin || null, color: color || null });
       this.hideAddCarForm();
-      App.toast('Авто додано ✓', 'success');
+      App.toast('Авто додано', 'success');
       this.open(clientId);
     } catch {
       App.toast('Помилка збереження', 'error');

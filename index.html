@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#e94560">
+  <meta name="theme-color" content="#2563EB">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Автосервіс">
@@ -17,7 +17,7 @@
 <div id="screen-login" class="screen" style="align-items:center;justify-content:center;padding:32px">
   <div style="width:100%;max-width:360px">
     <div style="text-align:center;margin-bottom:32px">
-      <div style="font-size:3rem;margin-bottom:12px">🔧</div>
+      <div class="auth-logo"><i data-lucide="wrench"></i></div>
       <h1 style="font-size:1.5rem;margin-bottom:4px">Автосервіс</h1>
       <p style="color:var(--text-muted);font-size:0.9rem">Увійдіть у свій акаунт</p>
     </div>
@@ -89,7 +89,7 @@
 <!-- ──────────────── DASHBOARD ─────────────────────── -->
 <div id="screen-dashboard" class="screen">
   <div class="screen-header">
-    <h1>🏠 Дашборд</h1>
+    <h1><i data-lucide="home"></i> Дашборд</h1>
   </div>
   <div class="screen-body">
     <div class="stats-grid">
@@ -113,19 +113,19 @@
     <div class="section-title" style="margin-top:8px">Швидкі дії</div>
     <div class="quick-grid">
       <div class="quick-btn" onclick="Orders.showNewOrderForm()">
-        <div class="qb-icon">➕</div>
+        <div class="qb-icon"><i data-lucide="plus"></i></div>
         <span>Нове замовлення</span>
       </div>
       <div class="quick-btn" onclick="Clients.showAddForm()">
-        <div class="qb-icon">👤</div>
+        <div class="qb-icon"><i data-lucide="user-plus"></i></div>
         <span>Новий клієнт</span>
       </div>
       <div class="quick-btn" onclick="App.navigate('orders')">
-        <div class="qb-icon">📋</div>
+        <div class="qb-icon"><i data-lucide="clipboard-list"></i></div>
         <span>Всі замовлення</span>
       </div>
       <div class="quick-btn" onclick="Finance.showAddForm()">
-        <div class="qb-icon">💸</div>
+        <div class="qb-icon"><i data-lucide="credit-card"></i></div>
         <span>Додати транзакцію</span>
       </div>
     </div>
@@ -135,11 +135,11 @@
 <!-- ──────────────── CLIENTS ───────────────────────── -->
 <div id="screen-clients" class="screen">
   <div class="screen-header">
-    <h1>👥 Клієнти</h1>
+    <h1><i data-lucide="users"></i> Клієнти</h1>
   </div>
   <div class="screen-body">
     <div class="search-box">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"><i data-lucide="search"></i></span>
       <input type="search" placeholder="Пошук клієнта..." oninput="Clients.search(this.value)">
     </div>
     <div id="clients-list">
@@ -173,15 +173,15 @@
 <!-- ──────────────── ORDERS ────────────────────────── -->
 <div id="screen-orders" class="screen">
   <div class="screen-header">
-    <h1>📋 Замовлення</h1>
+    <h1><i data-lucide="clipboard-list"></i> Замовлення</h1>
   </div>
   <div class="screen-body">
     <div class="tabs">
       <button class="tab-btn active" data-filter="all"      onclick="Orders.filter('all')">Всі</button>
-      <button class="tab-btn"        data-filter="new"       onclick="Orders.filter('new')">🆕 Нові</button>
-      <button class="tab-btn"        data-filter="in_progress" onclick="Orders.filter('in_progress')">🔧 В роботі</button>
-      <button class="tab-btn"        data-filter="done"     onclick="Orders.filter('done')">✅ Виконані</button>
-      <button class="tab-btn"        data-filter="closed"   onclick="Orders.filter('closed')">🔒 Закриті</button>
+      <button class="tab-btn"        data-filter="new"       onclick="Orders.filter('new')">Нові</button>
+      <button class="tab-btn"        data-filter="in_progress" onclick="Orders.filter('in_progress')">В роботі</button>
+      <button class="tab-btn"        data-filter="done"     onclick="Orders.filter('done')">Виконані</button>
+      <button class="tab-btn"        data-filter="closed"   onclick="Orders.filter('closed')">Закриті</button>
     </div>
     <div id="orders-list">
       <div class="loading-center"><div class="spinner"></div></div>
@@ -206,7 +206,7 @@
 <!-- ──────────────── FINANCE ───────────────────────── -->
 <div id="screen-finance" class="screen">
   <div class="screen-header">
-    <h1>💰 Фінанси</h1>
+    <h1><i data-lucide="wallet"></i> Фінанси</h1>
   </div>
   <div class="screen-body">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
@@ -224,7 +224,7 @@
 <!-- ──────────────── SETTINGS ──────────────────────── -->
 <div id="screen-settings" class="screen">
   <div class="screen-header">
-    <h1>⚙️ Налаштування</h1>
+    <h1><i data-lucide="settings"></i> Налаштування</h1>
   </div>
   <div class="screen-body">
     <div class="settings-section">
@@ -236,12 +236,12 @@
       <div class="form-group"><label>Місто</label><input id="settings-fop-city" placeholder="Київ"></div>
     </div>
 
-    <button class="btn btn-secondary" style="width:100%;margin-bottom:8px" onclick="App.testConnection()">🔌 Тест з'єднання</button>
+    <button class="btn btn-secondary" style="width:100%;margin-bottom:8px" onclick="App.testConnection()">Тест з'єднання</button>
 
-    <button class="btn btn-primary" onclick="App.saveSettings()">💾 Зберегти</button>
+    <button class="btn btn-primary" onclick="App.saveSettings()">Зберегти</button>
 
     <div style="margin-top:24px;text-align:center">
-      <button class="btn btn-secondary btn-sm" onclick="if(confirm('Вийти?'))Auth.logout()">🚪 Вийти</button>
+      <button class="btn btn-secondary btn-sm" onclick="if(confirm('Вийти?'))Auth.logout()">Вийти</button>
     </div>
   </div>
 </div>
@@ -249,19 +249,19 @@
 <!-- ──────────────── BOTTOM NAV ────────────────────── -->
 <nav id="bottom-nav" class="hidden">
   <button class="nav-tab" data-tab="dashboard" onclick="App.navigate('dashboard')">
-    <span class="nav-icon">🏠</span>Головна
+    <span class="nav-icon"><i data-lucide="home"></i></span>Головна
   </button>
   <button class="nav-tab" data-tab="clients" onclick="App.navigate('clients')">
-    <span class="nav-icon">👥</span>Клієнти
+    <span class="nav-icon"><i data-lucide="users"></i></span>Клієнти
   </button>
   <button class="nav-tab" data-tab="orders" onclick="App.navigate('orders')">
-    <span class="nav-icon">📋</span>Замовлення
+    <span class="nav-icon"><i data-lucide="clipboard-list"></i></span>Замовлення
   </button>
   <button class="nav-tab" data-tab="finance" onclick="App.navigate('finance')">
-    <span class="nav-icon">💰</span>Фінанси
+    <span class="nav-icon"><i data-lucide="wallet"></i></span>Фінанси
   </button>
   <button class="nav-tab" data-tab="settings" onclick="App.navigate('settings')">
-    <span class="nav-icon">⚙️</span>Налаштування
+    <span class="nav-icon"><i data-lucide="settings"></i></span>Налаштування
   </button>
 </nav>
 
@@ -275,7 +275,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2>Новий клієнт</h2>
-      <button class="btn btn-secondary btn-sm btn-icon" onclick="Clients.hideAddForm()">✕</button>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Clients.hideAddForm()"><i data-lucide="x"></i></button>
     </div>
     <form id="form-add-client" onsubmit="return false">
       <div class="form-group"><label>Ім'я / Компанія *</label><input id="client-name" placeholder="Іваненко Іван"></div>
@@ -290,7 +290,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2>Нове авто</h2>
-      <button class="btn btn-secondary btn-sm btn-icon" onclick="Clients.hideAddCarForm()">✕</button>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Clients.hideAddCarForm()"><i data-lucide="x"></i></button>
     </div>
     <form id="form-add-car" onsubmit="return false">
       <input type="hidden" id="car-client-id">
@@ -312,15 +312,15 @@
   <div class="modal">
     <div class="modal-header">
       <h2>Додати позицію</h2>
-      <button class="btn btn-secondary btn-sm btn-icon" onclick="Orders.hideAddItem()">✕</button>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Orders.hideAddItem()"><i data-lucide="x"></i></button>
     </div>
     <form id="form-add-item" onsubmit="return false">
       <input type="hidden" id="item-order-id">
       <div class="form-group">
         <label>Тип</label>
         <select id="item-type">
-          <option value="work">🔧 Робота</option>
-          <option value="part">⚙️ Запчастина</option>
+          <option value="work">Робота</option>
+          <option value="part">Запчастина</option>
         </select>
       </div>
       <div class="form-group"><label>Назва *</label><input id="item-name" placeholder="Заміна масла"></div>
@@ -349,7 +349,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2>Нове замовлення</h2>
-      <button class="btn btn-secondary btn-sm btn-icon" onclick="Orders.hideNewOrderForm()">✕</button>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Orders.hideNewOrderForm()"><i data-lucide="x"></i></button>
     </div>
     <form id="form-new-order" onsubmit="return false">
       <div class="form-group">
@@ -371,14 +371,14 @@
   <div class="modal">
     <div class="modal-header">
       <h2>Нова транзакція</h2>
-      <button class="btn btn-secondary btn-sm btn-icon" onclick="Finance.hideAddForm()">✕</button>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Finance.hideAddForm()"><i data-lucide="x"></i></button>
     </div>
     <form id="form-add-finance" onsubmit="return false">
       <div class="form-group">
         <label>Тип</label>
         <select id="finance-type">
-          <option value="income">⬆️ Дохід</option>
-          <option value="expense">⬇️ Витрата</option>
+          <option value="income">Дохід</option>
+          <option value="expense">Витрата</option>
         </select>
       </div>
       <div class="form-group"><label>Сума, грн *</label><input id="finance-amount" type="number" step="0.01" min="0" placeholder="1500"></div>
@@ -400,14 +400,16 @@
   </div>
 </div>
 
-<script src="config.js?v=3"></script>
-<script src="js/db.js?v=3"></script>
-<script src="js/onboarding.js?v=3"></script>
-<script src="js/auth.js?v=3"></script>
-<script src="js/clients.js?v=3"></script>
-<script src="js/orders.js?v=3"></script>
-<script src="js/finance.js?v=3"></script>
-<script src="js/docs.js?v=3"></script>
-<script src="js/app.js?v=3"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
+<script src="config.js?v=4"></script>
+<script src="js/db.js?v=4"></script>
+<script src="js/onboarding.js?v=4"></script>
+<script src="js/auth.js?v=4"></script>
+<script src="js/clients.js?v=4"></script>
+<script src="js/orders.js?v=4"></script>
+<script src="js/finance.js?v=4"></script>
+<script src="js/docs.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
+<script>document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });</script>
 </body>
 </html>

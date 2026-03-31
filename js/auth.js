@@ -104,16 +104,16 @@ const Auth = {
       const data = await res.json();
 
       if (!res.ok) {
-        err.textContent = '❌ ' + (data.error_description || data.msg || 'Невірний логін або пароль');
+        err.textContent = data.error_description || data.msg || 'Невірний логін або пароль';
         return;
       }
 
       const session = this.saveSession(data);
       await this.applySession(session);
-      App.toast('Вхід виконано ✓', 'success');
+      App.toast('Вхід виконано', 'success');
 
     } catch (e) {
-      err.textContent = '❌ Помилка з\'єднання';
+      err.textContent = 'Помилка з\'єднання';
     } finally {
       btn.disabled = false;
       btn.textContent = 'Увійти';
@@ -139,11 +139,13 @@ const Auth = {
     const err = document.getElementById('register-error');
     err.textContent = '';
 
+    if (!name.trim()) { err.textContent = 'Введіть ваше ім\'я'; return; }
+
     try {
       // Перевіряємо invite
       const invite = await DB._get('invites', { token: `eq.${inviteToken}`, status: 'eq.pending' });
       if (!invite.length) {
-        err.textContent = '❌ Невірний або використаний invite токен';
+        err.textContent = 'Невірний або використаний invite токен';
         return;
       }
 
@@ -159,7 +161,7 @@ const Auth = {
 
       const data = await res.json();
       if (!res.ok) {
-        err.textContent = '❌ ' + (data.msg || data.error_description || 'Помилка реєстрації');
+        err.textContent = data.msg || data.error_description || 'Помилка реєстрації';
         return;
       }
 
@@ -176,10 +178,10 @@ const Auth = {
       // (після логіну)
       const session = this.saveSession({ ...data, master_id: master.id, role: 'master' });
       await this.applySession(session);
-      App.toast('Акаунт створено ✓', 'success');
+      App.toast('Акаунт створено', 'success');
 
     } catch (e) {
-      err.textContent = '❌ Помилка: ' + e.message;
+      err.textContent = 'Помилка: ' + e.message;
     }
   },
 

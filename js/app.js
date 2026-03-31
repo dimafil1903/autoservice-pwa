@@ -30,6 +30,7 @@ const App = {
     const s = document.getElementById(id);
     if (s) s.classList.add('active');
     this.currentScreen = id;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   },
 
   navigate(tab) {
@@ -87,13 +88,13 @@ const App = {
     localStorage.setItem('fopAddress', document.getElementById('settings-fop-address').value.trim());
     localStorage.setItem('fopPhone',   document.getElementById('settings-fop-phone').value.trim());
     localStorage.setItem('fopCity',    document.getElementById('settings-fop-city').value.trim());
-    this.toast('Збережено ✓', 'success');
+    this.toast('Збережено', 'success');
   },
 
   async testConnection() {
     try {
       const r = await DB.ping();
-      this.toast(r.ok ? 'З\'єднання OK ✓' : 'Помилка відповіді', r.ok ? 'success' : 'error');
+      this.toast(r.ok ? 'З\'єднання OK' : 'Помилка відповіді', r.ok ? 'success' : 'error');
     } catch {
       this.toast('Немає з\'єднання', 'error');
     }

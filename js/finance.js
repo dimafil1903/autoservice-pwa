@@ -44,13 +44,14 @@ const Finance = {
 
     const list = document.getElementById('finance-list');
     if (!items.length) {
-      list.innerHTML = `<div class="empty-state"><div class="empty-icon">💰</div><p>Транзакцій немає</p></div>`;
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i data-lucide="wallet"></i></div><p>Транзакцій немає</p></div>`;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
       return;
     }
 
     list.innerHTML = items.map(i => `
       <div class="finance-row">
-        <div class="f-type">${i.type === 'income' ? '⬆️' : '⬇️'}</div>
+        <div class="f-type ${i.type === 'income' ? 'f-income-icon' : 'f-expense-icon'}"><i data-lucide="${i.type === 'income' ? 'trending-up' : 'trending-down'}"></i></div>
         <div class="f-body">
           <div>${i.comment || i.category || '—'}</div>
           <div class="f-cat">${i.category} · ${i.date || ''}</div>
@@ -60,6 +61,7 @@ const Finance = {
         </div>
       </div>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   },
 
   showAddForm() {
@@ -74,17 +76,17 @@ const Finance = {
 
   async save() {
     const type     = document.getElementById('finance-type').value;
-    const amount   = document.getElementById('finance-amount').value;
+    const amount   = parseFloat(document.getElementById('finance-amount').value);
     const category = document.getElementById('finance-category').value.trim();
     const date     = document.getElementById('finance-date').value;
     const comment  = document.getElementById('finance-comment').value.trim();
 
-    if (!amount || !date) { App.toast('Заповніть сумму та дату', 'error'); return; }
+    if (!amount || isNaN(amount) || amount <= 0 || !date) { App.toast('Вкажіть правильну суму та дату', 'error'); return; }
 
     try {
-      await DB.addFinance({ type, amount, category, date, comment });
+      await DB.addFinance({ type, amount, category: category || null, date, comment: comment || null });
       this.hideAddForm();
-      App.toast('Транзакцію додано ✓', 'success');
+      App.toast('Транзакцію додано', 'success');
       this.load();
     } catch {
       App.toast('Помилка збереження', 'error');

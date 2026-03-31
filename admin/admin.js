@@ -36,10 +36,10 @@ const Admin = {
         body: JSON.stringify({ email, password })
       });
       const data = await res.json();
-      if (!res.ok) { err.textContent = '❌ ' + (data.error_description || 'Невірний логін'); return; }
+      if (!res.ok) { err.textContent = (data.error_description || 'Невірний логін'); return; }
 
       const role = data.user?.user_metadata?.role;
-      if (role !== 'admin') { err.textContent = '❌ Немає прав адміна'; return; }
+      if (role !== 'admin') { err.textContent = 'Немає прав адміна'; return; }
 
       // Зберігаємо сесію (30 днів)
       localStorage.setItem('as_session', JSON.stringify({
@@ -53,7 +53,7 @@ const Admin = {
       document.getElementById('admin-panel').style.display = 'block';
       this.load();
     } catch (e) {
-      err.textContent = '❌ Помилка з\'єднання';
+      err.textContent = 'Помилка з\'єднання';
     }
   },
 
@@ -79,7 +79,7 @@ const Admin = {
   render() {
     const tbody = document.getElementById('masters-tbody');
     if (!this.masters.length) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">Майстрів немає</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#94A3B8">Майстрів немає</td></tr>';
       return;
     }
     tbody.innerHTML = this.masters.map(m => `
@@ -87,7 +87,7 @@ const Admin = {
         <td>${m.id ? m.id.slice(-8) : '—'}</td>
         <td>${m.name || '—'}</td>
         <td>${m.phone || '—'}</td>
-        <td><span class="status-badge ${m.status}">${m.status === 'active' ? '✅ Активний' : '❌ Заблоковано'}</span></td>
+        <td><span class="status-badge ${m.status}">${m.status === 'active' ? 'Активний' : 'Заблоковано'}</span></td>
         <td>${m.registered_at || '—'}</td>
         <td>
           ${m.status === 'active'
@@ -97,6 +97,7 @@ const Admin = {
         </td>
       </tr>
     `).join('');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   },
 
   async block(id) {
@@ -140,6 +141,8 @@ const Admin = {
   async saveMaster() {
     const name  = document.getElementById('master-name').value.trim();
     const phone = document.getElementById('master-phone').value.trim();
+
+    if (!name) { alert('Введіть ім\'я майстра'); return; }
 
     try {
       await AdminDB.addMaster({ name, phone, status: 'active' });
