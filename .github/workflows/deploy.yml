@@ -22,18 +22,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Inject secrets into config.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-        run: python3 scripts/inject-config.py
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_PWA_URL: https://dimafil1903.github.io/autoservice-pwa/
+        run: npm run build
+
+      - name: SPA fallback for GitHub Pages
+        run: cp dist/index.html dist/404.html
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: dist
 
       - uses: actions/deploy-pages@v4
         id: deployment
