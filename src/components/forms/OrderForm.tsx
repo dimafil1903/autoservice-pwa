@@ -47,7 +47,7 @@ export function OrderForm({ open, onClose, onSave, defaultCarId }: OrderFormProp
     control,
     formState: { errors, isSubmitting },
   } = useForm<OrderInput>({
-    resolver: zodResolver(orderSchema),
+    resolver: zodResolver(orderSchema) as any,
     defaultValues: {
       car_id: defaultCarId || '',
       problem: '',

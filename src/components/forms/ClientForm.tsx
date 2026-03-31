@@ -26,7 +26,7 @@ export function ClientForm({ open, onClose, onSave }: ClientFormProps) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ClientInput>({
-    resolver: zodResolver(clientSchema),
+    resolver: zodResolver(clientSchema) as any,
     defaultValues: { name: '', phone: '' },
   })
 

@@ -38,7 +38,7 @@ export function OrderItemForm({ open, orderId, onClose, onSave }: OrderItemFormP
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<OrderItemInput & { total: number }>({
-    resolver: zodResolver(orderItemSchema),
+    resolver: zodResolver(orderItemSchema) as any,
     defaultValues: {
       order_id: orderId,
       type: 'work',

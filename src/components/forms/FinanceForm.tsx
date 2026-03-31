@@ -34,7 +34,7 @@ export function FinanceForm({ open, onClose, onSave }: FinanceFormProps) {
     control,
     formState: { errors, isSubmitting },
   } = useForm<FinanceInput>({
-    resolver: zodResolver(financeSchema),
+    resolver: zodResolver(financeSchema) as any,
     defaultValues: {
       type: 'income',
       amount: '' as any,

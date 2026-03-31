@@ -27,7 +27,7 @@ export function CarForm({ open, clientId, onClose, onSave }: CarFormProps) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<CarInput>({
-    resolver: zodResolver(carSchema),
+    resolver: zodResolver(carSchema) as any,
     defaultValues: {
       client_id: clientId,
       brand: '',
