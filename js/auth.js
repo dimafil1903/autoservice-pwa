@@ -163,6 +163,9 @@ const Auth = {
         return;
       }
 
+      // Встановлюємо JWT перед запитами до БД (RLS потребує auth.uid())
+      DB._authToken = data.access_token;
+
       // Створюємо майстра в БД
       const master = await DB.addMaster({ name, invite_token: inviteToken, user_id: data.user?.id, status: 'active' });
 
