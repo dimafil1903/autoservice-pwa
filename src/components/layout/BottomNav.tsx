@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { Home, Users, ClipboardList, Wallet, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -13,9 +14,27 @@ const tabs = [
 export function BottomNav() {
   const location = useLocation()
   const navigate = useNavigate()
+  const [keyboardOpen, setKeyboardOpen] = useState(false)
+
+  // Hide bottom nav when iOS keyboard is open
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+
+    const handleResize = () => {
+      // If visual viewport height is significantly less than window height, keyboard is open
+      const keyboardVisible = vv.height < window.innerHeight * 0.75
+      setKeyboardOpen(keyboardVisible)
+    }
+
+    vv.addEventListener('resize', handleResize)
+    return () => vv.removeEventListener('resize', handleResize)
+  }, [])
+
+  if (keyboardOpen) return null
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
       <div className="flex items-center justify-around">
         {tabs.map(({ path, icon: Icon, label }) => {
           const active = path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)

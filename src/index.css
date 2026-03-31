@@ -19,6 +19,8 @@
   --color-warning: #F59E0B;
   --color-border: #334155;
   --color-input: #334155;
+  --color-popover: #1E293B;
+  --color-popover-foreground: #F8FAFC;
   --color-ring: #2563EB;
   --radius: 0.75rem;
 }
