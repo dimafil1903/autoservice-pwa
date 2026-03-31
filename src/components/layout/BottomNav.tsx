@@ -41,12 +41,11 @@ export function BottomNav() {
               key={path}
               onClick={() => navigate(path)}
               className={cn(
-                'flex min-h-[44px] min-w-[44px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors',
+                'flex min-h-[44px] min-w-[44px] flex-1 items-center justify-center py-2 transition-colors',
                 active ? 'text-primary' : 'text-muted-foreground',
               )}
             >
-              <Icon className="h-5 w-5" />
-              <span>{label}</span>
+              <Icon className="h-6 w-6" />
             </button>
           )
         })}
